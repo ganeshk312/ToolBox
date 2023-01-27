@@ -6,11 +6,14 @@ app = Flask(__name__)
 
 @app.route('/getQr', methods=['GET'])
 def qr():
-    img = make(request.args.get('url'))
+    img = qrcode.make(request.args.get('url'))
     img_io = BytesIO()
     img.save(img_io, 'PNG')
     img_io.seek(0)
-    return send_file(img_io, attachment_filename='qr_code.png', mimetype='image/png')
+    response = send_file(img_io, mimetype='image/png')
+    response.headers["Content-Disposition"] = "attachment; filename=qr_code.png"
+    return response
+
 
 @app.route('/emoji')
 def emoji():
