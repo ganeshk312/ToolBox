@@ -4,6 +4,14 @@ import requests
 
 app = Flask(__name__)
 
+@app.route('/getQr', methods=['GET'])
+def qr():
+    img = make(request.args.get('url'))
+    img_io = BytesIO()
+    img.save(img_io, 'PNG')
+    img_io.seek(0)
+    return send_file(img_io, attachment_filename='qr_code.png', mimetype='image/png')
+
 @app.route('/emoji')
 def emoji():
     # Generate a random image
